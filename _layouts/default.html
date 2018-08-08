@@ -131,7 +131,8 @@
             // Not required anymore if global auth listener does its job!
             store.dispatch('user/updateAuthStatus')
             .then(_ => {
-              resolve()
+              resolve();
+              listFiles();
             })
           }).catch(error => {
             dispatch('authenticationError', {error, note: 'error during gapi initialisation'})
