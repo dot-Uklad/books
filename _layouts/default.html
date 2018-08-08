@@ -1,7 +1,8 @@
-<html>
-  <head></head>
-  <body>
-    <script type="text/javascript">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript">
+    
       function handleClientLoad() {
         // Loads the client library and the auth2 library together for efficiency.
         // Loading the auth2 library is optional here since `gapi.client.init` function will load
@@ -21,54 +22,33 @@
           // Listen for sign-in state changes.
           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-          // Handle the initial sign-in state.
-          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        });
-      }
-
-      function updateSigninStatus(isSignedIn) {
-        // When signin status changes, this function is called.
-        // If the signin status is changed to signedIn, we make an API call.
-        if (isSignedIn) {
           retrieveAllFiles();
-        }
-      }
-
-      function handleSignInClick(event) {
-        // Ideally the button should only show up after gapi.client.init finishes, so that this
-        // handler won't be called before OAuth is initialized.
-        gapi.auth2.getAuthInstance().signIn();
-      }
-
-      function handleSignOutClick(event) {
-        gapi.auth2.getAuthInstance().signOut();
-      }
-      
-     
-/**
- * Retrieve a list of File resources.
- *
- * @param {Function} callback Function to call when the request is complete.
- */
-function retrieveAllFiles() {
-  var retrievePageOfFiles = function(request, result) {
-    request.execute(function(resp) {
-      result = result.concat(resp.items);
-      handleFileResults(result);
-      var nextPageToken = resp.nextPageToken;
-      if (nextPageToken) {
-        request = gapi.client.drive.files.list({
-          'pageToken': nextPageToken
         });
-        retrievePageOfFiles(request, result);
-      } 
-    });
-  }
-  var initialRequest = gapi.client.drive.files.list();
-  retrievePageOfFiles(initialRequest, []);
-}
-  
-      /**
+      }
+    
+     /**
+     * `gapi.client.drive.files.list()` returns paginated results, this will fetch every
+     * page and call `handleFileResults` with every batch.
+     *
+     */
+    function retrieveAllFiles() {
+      var retrievePageOfFiles = function(request) {
+        request.execute(function(resp) {
+          handleFileResults(resp.items);
+          var nextPageToken = resp.nextPageToken;
+          if (nextPageToken) {
+            request = gapi.client.drive.files.list({
+              'maxResults': 50,
+              'pageToken': nextPageToken
+            });
+            retrievePageOfFiles(request);
+          }
+        });
+      };
+      var initialRequest = gapi.client.drive.files.list({maxResults: 50});
+      retrievePageOfFiles(initialRequest, []);
+    }
+    /**
      * Takes the list of files from the Google Drive API and adds them to the DOM as clickable links.
      *
      * @param result - complete list of the users file, as returned by the Google Drive API
@@ -90,11 +70,12 @@ function retrieveAllFiles() {
         document.body.appendChild(div);
       });
     }
-    </script>
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
-    <button id="signin-button" onclick="handleClientLoad()">Sign In</button>
-  </body>
+  </script>
+  <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+</body>
 </html>
