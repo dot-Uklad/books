@@ -55,6 +55,55 @@
           console.log('Error: ' + reason.result.error.message);
         });
       }
+      
+     
+/**
+ * Retrieve a list of File resources.
+ *
+ * @param {Function} callback Function to call when the request is complete.
+ */
+function retrieveAllFiles(callback) {
+  var retrievePageOfFiles = function(request, result) {
+    request.execute(function(resp) {
+      result = result.concat(resp.items);
+      handleFileResults(result);
+      var nextPageToken = resp.nextPageToken;
+      if (nextPageToken) {
+        request = gapi.client.drive.files.list({
+          'pageToken': nextPageToken
+        });
+        retrievePageOfFiles(request, result);
+      } else {
+        callback(result);
+      }
+    });
+  }
+  var initialRequest = gapi.client.drive.files.list();
+  retrievePageOfFiles(initialRequest, []);
+}
+  
+      /**
+     * Takes the list of files from the Google Drive API and adds them to the DOM as clickable links.
+     *
+     * @param result - complete list of the users file, as returned by the Google Drive API
+     */
+    function handleFileResults(result) {
+      console.log('Got Some Files!', result);
+      // copy the results to the DOM as clickable links with fancy icons!
+      result.forEach(function(file) {
+        var div = document.createElement('div');
+        var link = document.createElement('a');
+        link.href = file.alternateLink;
+        var icon = document.createElement('img');
+        icon.src = file.iconLink;
+        var title = document.createElement('span');
+        title.innerHTML = file.title;
+        link.appendChild(icon);
+        link.appendChild(title);
+        div.appendChild(link);
+        document.body.appendChild(div);
+      });
+    }
     </script>
     <script async defer src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
