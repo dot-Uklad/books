@@ -14,6 +14,7 @@ angular.module('drivein')
 
     // Load the given fileId and allow parsing.
     $scope.load = function(doc) {
+      $log.info('IC loadDoc', doc);
       // Prevent displaying metadata in Homepage.
       // A promise is expected elswhere from this code, so return
       // an empty one to avoid breaking the chain of expectations.
