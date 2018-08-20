@@ -525,14 +525,6 @@ angular
           scope.subtitle = $sce.trustAsHtml(data.subtitle);
           scope.html = $sce.trustAsHtml(data.html);
 
-          var sections = data.sections.filter(function(d) {
-            d.html = $sce.trustAsHtml(d.html);
-            return true;
-          });
-
-          scope.sections = sections;
-
-          , 0);
         });
       }
     };
