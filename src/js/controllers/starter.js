@@ -21,6 +21,12 @@ angular.module('drivein')
     $scope.authorize = function(immediate) {
       $log.info('starterCtrl >>> authorize');
       $scope.setStatus(APP_STATUS_BEFORE_AUTHORIZATION);
+	  gapi.client.init({
+          'apiKey': 'AIzaSyAbody9IJZzDadK6uNjGTSiycWON8RwdoM',
+		  client_id: settings.CLIENT_ID,
+		  scope: settings.SCOPES,
+        immediate: immediate || false
+        }).then(function() {
       //gapi.auth.authorize({
       //  client_id: settings.CLIENT_ID,
       //  scope: settings.SCOPES,
@@ -30,7 +36,7 @@ angular.module('drivein')
           $scope.setStatus(APP_STATUS_AUTHORIZATION_SUCCESS);
           $log.info('Authorization confirmed. Access token has been successfully retrieved, requests can be sent to the API.');
           
-          $scope.access_token = 'AIzaSyAbody9IJZzDadK6uNjGTSiycWON8RwdoM';
+          //$scope.access_token = 'AIzaSyAbody9IJZzDadK6uNjGTSiycWON8RwdoM';
 
           gapi.client.load('drive', 'v2', function(){
             $scope.$broadcast('GOOGLE_API_LOADED');
@@ -41,7 +47,7 @@ angular.module('drivein')
        // }
         $scope.$apply();
         //$log.log(res)
-     // });
+      });
     };
 
     $scope.$on('GOOGLE_CLIENT_INITIALIZED', function(e, settings) {
