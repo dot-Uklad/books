@@ -31,7 +31,9 @@ angular.module('drivein')
          'Authorization': 'Bearer ' + $scope.access_token
         }
       }).then(function(res) {
-        return gdocParser.parse(res.data, doc);
+        var parsedGdoc = gdocParser.parse(res.data, doc);
+        $log.info('IC parsedGdoc', parsedGdoc);
+        return parsedGdoc;
       });
     };
 
