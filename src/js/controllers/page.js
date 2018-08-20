@@ -22,6 +22,8 @@ angular.module('drivein')
 
       if($routeParams.folder && $scope.fileId != $routeParams.folder) {
         $scope.discover($routeParams.folder);
+      } else {
+        $scope.discover(settings.sharing_link);
       }
     });
   });
