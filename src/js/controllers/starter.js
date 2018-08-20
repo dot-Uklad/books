@@ -35,10 +35,10 @@ angular.module('drivein')
           gapi.client.load('drive', 'v2', function(){
             $scope.$broadcast('GOOGLE_API_LOADED');
           });
-        } else {
-          $scope.setStatus(APP_STATUS_AUTHORIZATION_REQUIRED);
-          $log.info('No access token could be retrieved, show the button to start the authorization flow.');
-        }
+       // } else {
+       //   $scope.setStatus(APP_STATUS_AUTHORIZATION_REQUIRED);
+       //   $log.info('No access token could be retrieved, show the button to start the authorization flow.');
+       // }
         $scope.$apply();
         //$log.log(res)
       });
