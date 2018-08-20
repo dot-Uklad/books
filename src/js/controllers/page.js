@@ -9,7 +9,9 @@ angular.module('drivein')
   .controller('pageCtrl', function($scope, $log, $http, $routeParams, $route) {
     'use strict';
 
-    $scope.$parent.path = $route.current.originalPath.split('/').pop();
+  var parentPathId = $route.current.originalPath.split('/').pop();
+  $log.info('IC parentPathId', parentPathId);
+    $scope.$parent.path = parentPathId;
 
     /*
       ##eventListener $scope.app_status
