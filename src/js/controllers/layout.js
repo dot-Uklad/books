@@ -20,20 +20,6 @@ angular.module('drivein')
 
     $scope.items = []; // will contain the item tree of the main folder. Cfr discover
 
-    // parse bibtex and prepare bibliographical data from a bibtex string
-
-
-    /*
-      ##function mla
-      mla parser. Should be put as service?
-    */
-    function mla (bibtex) {
-      var bib = new BibtexParser();
-      bib.setInput(bibtex);
-      bib.bibtex();
-      return bib;
-    }
-
     /*
       ##function slugify
       Return a 'slug' version of a string, i-e containing a-z and 0-9 chars only.
@@ -111,29 +97,18 @@ angular.module('drivein')
       given a starting point url (the root of our website):
       - extract the fileId
       - request its list of children from gapi
-      - separate children items into folders, csv bibtext but NOT google documents. Cfr setPath for this
-      - finally, transform references
       - fill the vars $scope.references, $scope.folders, $scope.docs
       @param fileid - google drive sharing link
     */
     $scope.discover = function(fileid) {
       
-	  if (fileid==null) {
-		  $scope.fileId = settings.sharing_link; // root folder
-	  } else {
 		$scope.fileId = fileid; // root folder
-	  }
-	  
 
       var request = gapi.client.drive.files.list({
         q:  '"'+ fileid + '" in parents and trashed = false'
       });
-
      
       request.execute(function(res) { // analyse folder
-        var queue   = [], // queue of $http requests for each bibtext or for wach document
-            references = [],
-            bibtexs = [];
 
         $scope.folders = res.items
           .sort(function(a, b) {
@@ -146,39 +121,6 @@ angular.module('drivein')
             return d.mimeType == 'application/vnd.google-apps.folder';
           });
 
-        $scope.items = res.items;
-
-        // get reference from imported csv references
-        references = res.items.filter(function(d) {
-          return d.mimeType == 'text/csv' && d.title.toLowerCase().indexOf('references') != -1;
-        });
-
-        bibtexs = res.items.filter(function(d) {
-          return d.mimeType == 'text/x-bibtex';
-        });
-
-        if (references.length) {
-          for(var i in references) {
-            queue.push(
-              $http({
-                url: references[i].downloadUrl,
-                method: 'GET',
-             
-                }*/
-              })
-            );
-          }
-
-          $q.all(queue).then(function(responses) {
-            var r = [];
-            // transform csv data to js, then clean each csv header
-            responses.forEach(function(d) {
-              r = r.concat($.csv.toObjects(d.data).map(cleanCSVHeaders));
-            });
-
-            $scope.references = r;
-            $scope.bibliography = true;
-          });
         }
         $scope.$apply();
       }); // end of request execute
