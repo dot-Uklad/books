@@ -232,10 +232,10 @@ angular.module('drivein')
 
         $scope.items = res.items;
 
-        getMetadata(res)
+       /* getMetadata(res)
           .then(function(metadata) {
             $scope.metadata = metadata;
-          });
+          });*/
 
         // get reference from imported csv references
         references = res.items.filter(function(d) {
