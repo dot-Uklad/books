@@ -10,7 +10,7 @@ angular.module('drivein')
   .controller('layoutCtrl', function($scope, $log, $http, $q, $routeParams, gdocParser, METADATA_FILE) {
     'use strict';
 
-    $scope.path = '';
+    $scope.path = settings.sharing_link;
 
     $scope.title = settings.title;
 
