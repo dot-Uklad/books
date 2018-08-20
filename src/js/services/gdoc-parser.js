@@ -100,6 +100,9 @@ angular
     return {
         // transform the source text of a googledocument into a json object.
         parse: function (text, doc) {
+            $log.info('IC parseDoc', doc);
+            $log.info('IC parseText', text);
+            
           var body = text.match(/<body[^>]*>(.*?)<\/body>/i),
               Q = $('<div/>').append(body.pop()),
               result = {
