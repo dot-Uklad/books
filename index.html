@@ -3,14 +3,26 @@
 
   <head >
     <meta charset="UTF-8">
-    <link href='src/css/css.css' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="src/js/libs/bootstrap.min.css">
-    <link href='src/css/style.css' rel='stylesheet' type='text/css'>
+    <link href='css/css.css' rel='stylesheet' type='text/css'>
+    <link href="libs/bootstrap.min.css" rel="stylesheet" type='text/css'>
+    <link href='css/style.css' rel='stylesheet' type='text/css'>
 
-    <script src="settings.js"></script>
+    <script>
+	var settings;
+
+(function() {
+    'use strict';
+
+    settings = {
+     
+      baseurl:       'http://uklad.eu.org/', 
+     // sharing_link: '1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g',
+    };
+})();
+	</script>
   </head>
 
-  <body ng-app="drivein">
+  <body ng-app="uklad">
     <style>
     [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
       display: none !important;
@@ -27,7 +39,7 @@
       <div id="layout" ng-cloak ng-controller="layoutCtrl"><!--layout-->
 		<div id="menu-container"><!--menu-->
 			<aside>
-			  <a ng-href="#/1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g"><h1>{{title}}</h1></a><!--logo-->
+			  <a ng-href="#/1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g"><h1>.Układ Books</h1></a><!--logo-->
 			  <ul><!--folder list-->
 				<li ng-repeat="folder in folders" class="{{path == folder.slug? 'selected': ''}}">
 				  <a ng-href="#/{{fileId}}/{{folder.slug}}">{{folder.title}}</a>
@@ -53,57 +65,37 @@
 	'use strict';
 
 var APP_STATUS_INIT  = 'app_status_init',
-    APP_STATUS_BEFORE_AUTHORIZATION    = 'APP_STATUS_BEFORE_AUTHORIZATION',
-    APP_STATUS_AUTHORIZATION_SUCCESS   = 'APP_STATUS_AUTHORIZATION_SUCCESS',
-    APP_STATUS_AUTHORIZATION_REQUIRED  = 'APP_STATUS_AUTHORIZATION_REQUIRED',
-    APP_STATUS_READY                   = 'APP_STATUS_READY',
-    APP_STATUS_DISCOVERING_COMPLETED   = 'APP_STATUS_DISCOVERING_COMPLETED';
+    //APP_STATUS_BEFORE_AUTHORIZATION    = 'APP_STATUS_BEFORE_AUTHORIZATION',
+    //APP_STATUS_AUTHORIZATION_SUCCESS   = 'APP_STATUS_AUTHORIZATION_SUCCESS',
+   // APP_STATUS_AUTHORIZATION_REQUIRED  = 'APP_STATUS_AUTHORIZATION_REQUIRED',
+    APP_STATUS_READY                   = 'APP_STATUS_READY';
+   // APP_STATUS_DISCOVERING_COMPLETED   = 'APP_STATUS_DISCOVERING_COMPLETED';
 
 
-
-angular.module('drivein', [
+//single page
+angular.module('uklad', [
   'ngRoute'
-]).constant('METADATA_FILE', ['metadata', 'crédits', 'credits'])
-  .config(function ($routeProvider, $httpProvider) {
+]).config(function ($routeProvider, $httpProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: settings.baseurl + 'src/views/index.html',
+        templateUrl: 'http://uklad.eu.org/doc.html',
         controller: 'indexCtrl'
       })
-      .when('/drive-to/:folder', { // set new starting url
-        templateUrl: settings.baseurl + 'src/views/index.html',
-        controller: 'indexCtrl'
-      })
-      .when('/:folder', { // home
-        templateUrl: settings.baseurl + 'src/views/index.html',
-        controller: 'indexCtrl'
-      })
-      .when('/:folder/d/references', {
-        templateUrl: settings.baseurl + 'src/views/references.html',
-        controller: 'pageCtrl'
-      })
-      .when('/:folder/d/credits', {
-        templateUrl: settings.baseurl + 'src/views/credits.html',
-        controller: 'pageCtrl'
-      })
-      .when('/:folder/:path', { // subpath (1 level max)
-        templateUrl: settings.baseurl + 'src/views/index.html',
-        controller: 'indexCtrl'
-      })
-
+      
       .otherwise({
         redirectTo: '/'
       });
   });
 
-  
-  String.prototype.replaceAll = function (find, replace) {
-    var str = this;
-    return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+//helper
+String.prototype.replaceAll = function (find, replace) {
+  var str = this;
+  return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 };
 
+//service
 angular
-  .module('drivein')
+  .module('uklad')
   .service('gdocParser', function() {
     function reduce(input, rgx, replacement) {
       var found, output = input;
@@ -115,7 +107,7 @@ angular
       return output;
     };
 
-    function prepareSidenotes(input) {
+  /*  function prepareSidenotes(input) {
       var found, output = input;
 
       // Find references in text.
@@ -133,7 +125,7 @@ angular
       }
 
       return output;
-    }
+    }*/
 
     function embeddify(input) {
       function decodeHtml (input) {
@@ -158,8 +150,8 @@ angular
 
       // Comments on gDoc create special tags. Find tags for both the reference in text and
       // the referred comment. Store them. We use this methodology to specify sidenotes.
-      var sidenoted = prepareSidenotes(html);
-      var embeddified = embeddify(sidenoted);
+     // var sidenoted = prepareSidenotes(html);
+      var embeddified = embeddify(html);
 
       // Reduce text to version where `<span class="c5">...</span>` becomes `<em>...</span>`,
       // then pass this transformed text to another reducer making it `<em>...</em>`,
@@ -224,7 +216,7 @@ angular
           subtitle.remove();
 
           // transform vimeo links inside sections
-          transformHref(Q.find('a'), doc);
+        //  transformHref(Q.find('a'), doc);
 
           Q.each(function (i, el) {
             var $el = $(el);
@@ -263,7 +255,7 @@ angular
     };
 });
 
-  angular.module('drivein')
+  angular.module('uklad')
   .controller('starterCtrl', function($scope, $log) {
     'use strict';
        
@@ -278,14 +270,14 @@ angular
     */
     $scope.authorize = function(immediate) {
       
-      $scope.setStatus(APP_STATUS_BEFORE_AUTHORIZATION);
+     // $scope.setStatus(APP_STATUS_BEFORE_AUTHORIZATION);
 	  gapi.client.init({
           'apiKey': 'AIzaSyAbody9IJZzDadK6uNjGTSiycWON8RwdoM',
-		  client_id: settings.CLIENT_ID,
-		  scope: settings.SCOPES,
+		  client_id: '1029418226097-0riqh3nck6akm6tohg6unh59m30g0004.apps.googleusercontent.com',
+		  scope: 'https://www.googleapis.com/auth/drive',
         immediate: immediate || false
         }).then(function() {
-          $scope.setStatus(APP_STATUS_AUTHORIZATION_SUCCESS);
+       //   $scope.setStatus(APP_STATUS_AUTHORIZATION_SUCCESS);
           
           gapi.client.load('drive', 'v2', function(){
             $scope.$broadcast('GOOGLE_API_LOADED');
@@ -302,7 +294,7 @@ angular
   
   });
 
-  angular.module('drivein')
+  angular.module('uklad')
   .controller('layoutCtrl', function($scope, $log, $http, $q, $routeParams, gdocParser, METADATA_FILE) {
     'use strict';
 
@@ -432,7 +424,7 @@ angular
   });
 
   
-  angular.module('drivein')
+  angular.module('uklad')
   .controller('indexCtrl', function($scope, $log, $http, $q, $routeParams, $rootScope, gdocParser, METADATA_FILE) {
     'use strict';
 
@@ -489,7 +481,7 @@ angular
   });
   
   
-  angular.module('drivein')
+  angular.module('uklad')
   .controller('pageCtrl', function($scope, $log, $http, $routeParams, $route) {
     'use strict';
 
@@ -516,10 +508,10 @@ angular
     });
   });
   
-  angular.module('drivein')
+  angular.module('uklad')
   .directive('gdoc', function($log, $sce, $timeout) {
     return {
-      templateUrl: settings.baseurl + '/src/partials/gdoc.html',
+      templateUrl: 'http://uklad.eu.org/gdoc.html',
       restrict: 'E',
       scope: {
         doc: '=',
@@ -540,58 +532,7 @@ angular
 
           scope.sections = sections;
 
-          // Deal with sidenotes, if any, and remove empty doc.
-          $timeout(function() {
-            var $gdoc = $(element.find('.gdoc'));
-            var $sup = $gdoc.find('sup');
-            if ($sup.length > 0) {
-              var GUTTER_OFFSET = 15;
-              var NOTE_HEIGHT_OFFSET = 10;
-              var rawSidenotes = $gdoc.find('.contents div');
-
-              var sidenotes = [];
-              rawSidenotes.each(function (i, note) {
-                var t = note.innerText ? note.innerText : note.textContent;
-                if (t.match(/\[\d+\]/gim)) {
-                  sidenotes.push({index: i, note: note});
-                } else {
-                  $(note).remove();
-                }
-              });
-
-              // Several refs in the same parag will overlap.
-              // Store handy references enabling visual stacking to fix overlap if it happens.
-              var $lastReferencedParagraph;
-              var lastNoteHeight = 0;
-
-              // Position each note to the right gutter next to referencing paragraph.
-              sidenotes.forEach(function (n, i) {
-                var $s = $($sup.get(i));
-                var $note = $(n.note);
-                var $parag = $s.parent();
-                var paragOffset = $parag.offset();
-
-
-
-                // Compare current reference paragraph with the one referencing the previous note.
-                // If they are the same, ensure notes don't overlap.
-                if ($lastReferencedParagraph) {
-                  if ($lastReferencedParagraph.get(0) == $parag.get(0)) {
-                    paragOffset.top += lastNoteHeight + NOTE_HEIGHT_OFFSET;
-                  }
-                }
-
-                $note.addClass('sidenote');
-                $note.offset({top: paragOffset.top, left: paragOffset.left + $parag.parent().width() + GUTTER_OFFSET});
-
-                $lastReferencedParagraph = $parag;
-                lastNoteHeight = $note.height()
-              });
-
-              $lastReferencedParagraph = null;
-              lastNoteHeight = null;
-            }
-          }, 0);
+          , 0);
         });
       }
     };
