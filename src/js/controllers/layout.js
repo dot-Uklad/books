@@ -121,7 +121,6 @@ angular.module('drivein')
             return d.mimeType == 'application/vnd.google-apps.folder';
           });
 
-        }
         $scope.$apply();
       }); // end of request execute
     };
