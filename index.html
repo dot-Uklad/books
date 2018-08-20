@@ -6,20 +6,6 @@
     <link href='css/css.css' rel='stylesheet' type='text/css'>
     <link href="libs/bootstrap.min.css" rel="stylesheet" type='text/css'>
     <link href='css/style.css' rel='stylesheet' type='text/css'>
-
-    <script>
-	var settings;
-
-(function() {
-    'use strict';
-
-    settings = {
-     
-      baseurl:       'http://uklad.eu.org/', 
-     // sharing_link: '1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g',
-    };
-})();
-	</script>
   </head>
 
   <body ng-app="uklad">
@@ -282,7 +268,7 @@ angular
       });
     };
 
-    $scope.$on('GOOGLE_CLIENT_INITIALIZED', function(e, settings) {
+    $scope.$on('GOOGLE_CLIENT_INITIALIZED', function(e) {
      
       $scope.authorize(true);
     });
@@ -296,7 +282,7 @@ angular
 
     $scope.path = '';
 
-    $scope.title = settings.title;
+    $scope.title = '.Układ blog';
 
     $scope.folders = [];
 
@@ -411,7 +397,7 @@ angular
 
     $scope.$on('GOOGLE_API_LOADED', function() {
 		
-      var link = settings.sharing_link.match(/id=([a-zA-Z0-9]+)/),
+      var link = '1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g',
           fileid;
       
       $scope.setStatus(APP_STATUS_READY);
@@ -461,9 +447,7 @@ angular
 
       if($routeParams.folder && $scope.fileId != $routeParams.folder) {
         $scope.discover($routeParams.folder);
-      } //else {
-       // $scope.discover(settings.sharing_link);
-	 // }
+      } 
     });
   });
   
@@ -488,10 +472,7 @@ angular
       if($routeParams.folder && $scope.fileId != $routeParams.folder) {
          $log.info('IC page routeParams.folder', $routeParams.folder);
         $scope.discover($routeParams.folder);
-      } else {
-        $log.info('IC page sharing_link', settings.sharing_link);
-        $scope.discover(settings.sharing_link);
-      }
+      } 
     });
   });
   
@@ -520,7 +501,7 @@ angular
     function load() {
       //console.log('google drive loaded.');
       var scope = angular.element($("#drive-starter")).scope(); // cfr StarterCtrl in controllers.js
-      scope.$emit('GOOGLE_CLIENT_INITIALIZED', settings);
+      scope.$emit('GOOGLE_CLIENT_INITIALIZED');
     }
     </script>
     <script src="https://apis.google.com/js/client.js?onload=load"></script>
