@@ -10,7 +10,7 @@ angular.module('drivein')
     'use strict';
 
   var parentPathId = $route.current.originalPath.split('/').pop();
-  $log.info('IC parentPathId', parentPathId);
+  
     $scope.$parent.path = parentPathId;
 
     /*

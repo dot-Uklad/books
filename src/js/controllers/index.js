@@ -27,9 +27,7 @@ angular.module('drivein')
       return $http({
         url: doc.exportLinks['text/html'],
         method: 'GET',
-      /*  headers: {
-         'Authorization': 'Bearer ' + $scope.access_token
-        }*/
+
       }).then(function(res) {
         var parsedGdoc = gdocParser.parse(res.data, doc);
         
@@ -53,17 +51,15 @@ angular.module('drivein')
       This allow to load folder content and start the parsing chain.
     */
     $scope.$watch('app_status', function(app_status){
-      //$log.log('indexCtrl @app_status', app_status);
+
       if(app_status != APP_STATUS_READY) {
         return;
       }
 
       if($routeParams.folder && $scope.fileId != $routeParams.folder) {
-		  $log.info('IC index routeParams.folder', $routeParams.folder);
         $scope.discover($routeParams.folder);
-      } else {
-		  $log.info('IC page sharing_link', settings.sharing_link);
-        $scope.discover(settings.sharing_link);
-	  }
+      } //else {
+       // $scope.discover(settings.sharing_link);
+	 // }
     });
   });

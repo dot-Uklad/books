@@ -117,7 +117,7 @@ angular.module('drivein')
       @param fileid - google drive sharing link
     */
     $scope.discover = function(fileid) {
-      $log.info('IC layoutCtrl >>> executing', fileid);
+      
 	  if (fileid==null) {
 		  $scope.fileId = settings.sharing_link; // root folder
 	  } else {
@@ -129,7 +129,7 @@ angular.module('drivein')
         q:  '"'+ fileid + '" in parents and trashed = false'
       });
 
-      $log.info('layoutCtrl >>> executing', fileid);
+     
       request.execute(function(res) { // analyse folder
         var queue   = [], // queue of $http requests for each bibtext or for wach document
             references = [],
@@ -148,11 +148,6 @@ angular.module('drivein')
 
         $scope.items = res.items;
 
-       /* getMetadata(res)
-          .then(function(metadata) {
-            $scope.metadata = metadata;
-          });*/
-
         // get reference from imported csv references
         references = res.items.filter(function(d) {
           return d.mimeType == 'text/csv' && d.title.toLowerCase().indexOf('references') != -1;
@@ -168,8 +163,7 @@ angular.module('drivein')
               $http({
                 url: references[i].downloadUrl,
                 method: 'GET',
-              /*  headers: {
-                 'Authorization': 'Bearer ' + $scope.access_token
+             
                 }*/
               })
             );
@@ -191,7 +185,7 @@ angular.module('drivein')
     };
 
     $scope.$on('GOOGLE_API_LOADED', function() {
-		$log.info('IC layoutCtrl >>> api loaded', fileid);
+		
       var link = settings.sharing_link.match(/id=([a-zA-Z0-9]+)/),
           fileid;
       
