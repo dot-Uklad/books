@@ -129,6 +129,7 @@ angular.module('drivein')
             else {
               try {
                 convertedMetadata = gdocParser.parseMetadata(response.data);
+                $log.info('IC convertedMetadata', convertedMetadata);
               }
               catch(error) {
                 $log.error(error);
