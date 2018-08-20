@@ -10,7 +10,7 @@ angular.module('drivein')
   .controller('layoutCtrl', function($scope, $log, $http, $q, $routeParams, gdocParser, METADATA_FILE) {
     'use strict';
 
-    $scope.path = settings.sharing_link;
+    $scope.path = '';
 
     $scope.title = settings.title;
 
@@ -58,96 +58,6 @@ angular.module('drivein')
         t[k.replace(/\s/g, '_')] = d[k];
       }
       return t;
-    }
-
-    /**
-     * Given a list of files in the Drive, find the one holding metadata.
-     * Search is based on case-insensitive file naming: "metadata", "crédits", "credits".
-     * Strings are compared using a substring of the filename, to include edge cases
-     * where file is misnamed (e.g. "metadata(1).csv").
-     *
-     * @param  {Array}  items             Files in Drive.
-     * @param  {string} requestedMimeType File MIMEType used to narrow down search.
-     * @return {Object} The metadata file.
-     */
-    function findMetadataItem(items, requestedMimeType) {
-      var filteredItems = items.filter(function(item) {
-        var names = METADATA_FILE.join(' ');
-        return (
-          item.mimeType == requestedMimeType &&
-          names.indexOf(item.title.toLowerCase().substring(0, 7)) > -1
-        );
-      });
-
-      if(!filteredItems.length) {
-        $log.warn('no metadata found for mimeType', requestedMimeType);
-        return null;
-      }
-
-      if(filteredItems.length > 1) {
-        $log.warn('more than one metadata file found, choosing the first one');
-      }
-      return filteredItems[0];
-    }
-
-    function getMetadata(driveData) {
-      var metadataItem = findMetadataItem(driveData.items, 'application/vnd.google-apps.document');
-      if(!metadataItem) {
-        metadataItem = findMetadataItem(driveData.items, 'text/csv');
-      }
-
-      // get metadata from file (there should be only one per drive-in !)
-      if(metadataItem) {
-        var metadataFileUrl;
-        if(metadataItem.mimeType === 'text/csv') {
-          metadataFileUrl = metadataItem.downloadUrl;
-        }
-        else if(metadataItem.mimeType === 'application/vnd.google-apps.document') {
-          metadataFileUrl = metadataItem.exportLinks['text/html'];
-        }
-        else {
-          $log.warn('found a metadata file with unhandled mime type ', metadataItem.mimeType);
-        }
-
-        return $http({
-          url: metadataFileUrl,
-          method: 'GET',
-          headers: {
-           'Authorization': 'Bearer ' + $scope.access_token
-          }
-        }).then(function(response) {
-            var convertedMetadata = null;
-
-            if(metadataItem.mimeType === 'text/csv') {
-              try {
-                convertedMetadata = $.csv.toObjects(response.data).map(cleanCSVHeaders)[0];
-              }
-              catch(error) { // metadata csv is not correct
-                $log.error(error);
-              }
-            }
-            else {
-              try {
-                convertedMetadata = gdocParser.parseMetadata(response.data);
-                $log.info('IC convertedMetadata', convertedMetadata);
-              }
-              catch(error) {
-                $log.error(error);
-              }
-            }
-
-            // /!\ Hack to fix Angular bad habit of sorting alphabetically.
-            // What a horrible piece of software.
-            // @see https://github.com/angular/angular.js/issues/6210
-            // @see http://stackoverflow.com/questions/19676694/ng-repeat-directive-sort-the-data-when-using-key-value
-            convertedMetadata = { keys: Object.keys(convertedMetadata), raw: convertedMetadata };
-            return convertedMetadata;
-          });
-      }
-
-      throw new Error(
-        'Metadata file was not found. Ensure a file named "metadata", "crédits" or "credits" exists.'
-      );
     }
 
     /*
@@ -276,7 +186,7 @@ angular.module('drivein')
     };
 
     $scope.$on('GOOGLE_API_LOADED', function() {
-
+		$log.info('IC layoutCtrl >>> api loaded', fileid);
       var link = settings.sharing_link.match(/id=([a-zA-Z0-9]+)/),
           fileid;
       
