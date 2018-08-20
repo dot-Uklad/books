@@ -1,0 +1,26 @@
+<div id="page" ng-if="metadata">
+  <h2 ng-if="metadata">
+    <span ng-if="metadata.raw.lang === 'fr'">Crédits</span>
+    <span ng-if="metadata.raw.lang !== 'fr'">Credits</span>
+  </h2>
+    <table>
+        <tr ng-repeat="key in metadata.keys">
+            <td class="about-key" ng-if="key.trim().toLowerCase() !== 'lang' && key.trim().toLowerCase() !== 'langue'">
+                {{key | lowercase}}
+            </td>
+            <td class="about-value" ng-if="key.trim().toLowerCase() !== 'lang' && key.trim().toLowerCase() !== 'langue'">
+                 {{metadata.raw[key]}}
+            </td>
+        </tr>
+    </table>
+</div>
+<div ng-if="!metadata && app_status=='APP_STATUS_READY'">... lacking metadata</div>
+<div>
+  <br />
+  Powered by <a href="https://github.com/medialab/drive-in" target="_blank" rel="noopener">Drive-In</a>,
+  developed by <a href="http://forccast.hypotheses.org" target="_blank" rel="noopener">Forccast</a> |
+  <a href="http://medialab.sciences-po.fr" target="_blank" rel="noopener">Sciences po médialab</a>
+  <br />
+  <a href="http://forccast.hypotheses.org" target="_blank" rel="noopener" class="logo-forccast"></a>
+  <a href="http://medialab.sciences-po.fr" target="_blank" rel="noopener" class="logo-medialab"></a>
+</div>
