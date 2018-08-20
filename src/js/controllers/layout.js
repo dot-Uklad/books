@@ -280,7 +280,8 @@ angular.module('drivein')
           fileid;
       $log.log('IC link', link);
       $log.log('IC fileid', fileid);
-      $log.log('IC settings.sharing_link", settings.sharing_link);
+      $log.log('IC settings.sharing_link', settings.sharing_link);
+      $scope.fileId = settings.sharing_link;
       $scope.setStatus(APP_STATUS_READY);
       $scope.$apply();
     });
