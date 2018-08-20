@@ -5,7 +5,7 @@ var settings;
 
     settings = {
       title:        '.Układ Books',
-      baseurl:       '', // your base url useful for subpath, if any.
+      baseurl:       'http://uklad.eu.org/', // your base url useful for subpath, if any.
       
       sharing_link: 'https://drive.google.com/drive/folders/1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g?usp=sharing',
 
