@@ -41,7 +41,7 @@ angular.module('drivein')
        // }
         $scope.$apply();
         //$log.log(res)
-      });
+     // });
     };
 
     $scope.$on('GOOGLE_CLIENT_INITIALIZED', function(e, settings) {
