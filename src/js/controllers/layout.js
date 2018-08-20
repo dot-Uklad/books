@@ -278,7 +278,7 @@ angular.module('drivein')
 
       var link = settings.sharing_link.match(/id=([a-zA-Z0-9]+)/),
           fileid;
-
+      $scope.fileId = link;
       $scope.setStatus(APP_STATUS_READY);
       $scope.$apply();
     });
