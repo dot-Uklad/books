@@ -117,8 +117,13 @@ angular.module('drivein')
       @param fileid - google drive sharing link
     */
     $scope.discover = function(fileid) {
-      
-      $scope.fileId = fileid; // root folder
+      $log.info('IC layoutCtrl >>> executing', fileid);
+	  if (fileid==null) {
+		  $scope.fileId = settings.sharing_link; // root folder
+	  } else {
+		$scope.fileId = fileid; // root folder
+	  }
+	  
 
       var request = gapi.client.drive.files.list({
         q:  '"'+ fileid + '" in parents and trashed = false'

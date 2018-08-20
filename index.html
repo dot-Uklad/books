@@ -28,7 +28,7 @@
       <div id="layout" ng-cloak ng-controller="layoutCtrl">
       <div id="menu-container">
         <aside>
-          <a ng-href="#/{{fileId}}"><h1>{{title}}</h1></a>
+          <a ng-href="#/{{settings.sharing_link}}"><h1>{{title}}</h1></a>
           <ul>
             <li ng-repeat="folder in folders" class="{{path == folder.slug? 'selected': ''}}">
               <a ng-href="#/{{fileId}}/{{folder.slug}}">{{folder.title}}</a>
