@@ -21,16 +21,16 @@ angular.module('drivein')
     $scope.authorize = function(immediate) {
       $log.info('starterCtrl >>> authorize');
       $scope.setStatus(APP_STATUS_BEFORE_AUTHORIZATION);
-      gapi.auth.authorize({
-        client_id: settings.CLIENT_ID,
-        scope: settings.SCOPES,
-        immediate: immediate || false
-      }, function(res) {
-        if (res && !res.error) {
+      //gapi.auth.authorize({
+      //  client_id: settings.CLIENT_ID,
+      //  scope: settings.SCOPES,
+      //  immediate: immediate || false
+      //}, function(res) {
+      //  if (res && !res.error) {
           $scope.setStatus(APP_STATUS_AUTHORIZATION_SUCCESS);
           $log.info('Authorization confirmed. Access token has been successfully retrieved, requests can be sent to the API.');
           
-          $scope.access_token = res.access_token;
+          $scope.access_token = 'AIzaSyAbody9IJZzDadK6uNjGTSiycWON8RwdoM';
 
           gapi.client.load('drive', 'v2', function(){
             $scope.$broadcast('GOOGLE_API_LOADED');
