@@ -4,12 +4,12 @@ var settings;
     'use strict';
 
     settings = {
-      title:        'drive-in',
-      baseurl:       '', // your base url useful for subpath, if any.
+      title:        '.Układ Books',
+      baseurl:       'http://uklad.eu.org', // your base url useful for subpath, if any.
       
-      sharing_link: 'https://drive.google.com/folderview?id=XXXXYYYYZZZZ&usp=sharing',
+      sharing_link: 'https://drive.google.com/drive/folders/1P-Uo8eBwhBfpngbUTk3-k5H8jsXe4P-g?usp=sharing',
 
-      CLIENT_ID:    'YOURCLIENTID.apps.googleusercontent.com',
+      CLIENT_ID:    '1029418226097-0riqh3nck6akm6tohg6unh59m30g0004.apps.googleusercontent.com',
       SCOPES:       'https://www.googleapis.com/auth/drive',
     };
 })();
