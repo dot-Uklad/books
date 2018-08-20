@@ -27,26 +27,13 @@ angular.module('drivein')
 		  scope: settings.SCOPES,
         immediate: immediate || false
         }).then(function() {
-      //gapi.auth.authorize({
-      //  client_id: settings.CLIENT_ID,
-      //  scope: settings.SCOPES,
-      //  immediate: immediate || false
-      //}, function(res) {
-      //  if (res && !res.error) {
           $scope.setStatus(APP_STATUS_AUTHORIZATION_SUCCESS);
           $log.info('Authorization confirmed. Access token has been successfully retrieved, requests can be sent to the API.');
           
-          //$scope.access_token = 'AIzaSyAbody9IJZzDadK6uNjGTSiycWON8RwdoM';
-
           gapi.client.load('drive', 'v2', function(){
             $scope.$broadcast('GOOGLE_API_LOADED');
           });
-       // } else {
-       //   $scope.setStatus(APP_STATUS_AUTHORIZATION_REQUIRED);
-       //   $log.info('No access token could be retrieved, show the button to start the authorization flow.');
-       // }
         $scope.$apply();
-        //$log.log(res)
       });
     };
 

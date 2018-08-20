@@ -168,9 +168,9 @@ angular.module('drivein')
               $http({
                 url: references[i].downloadUrl,
                 method: 'GET',
-                headers: {
+              /*  headers: {
                  'Authorization': 'Bearer ' + $scope.access_token
-                }
+                }*/
               })
             );
           }

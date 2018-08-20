@@ -27,9 +27,9 @@ angular.module('drivein')
       return $http({
         url: doc.exportLinks['text/html'],
         method: 'GET',
-        headers: {
+      /*  headers: {
          'Authorization': 'Bearer ' + $scope.access_token
-        }
+        }*/
       }).then(function(res) {
         var parsedGdoc = gdocParser.parse(res.data, doc);
         
